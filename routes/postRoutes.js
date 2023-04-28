@@ -115,7 +115,6 @@ router.post('/submit',(req,res)=>{
                     edited : false
                 });
                 await newPost.save().then(done => res.send("done")).catch(err => res.sendStatus(500));
-                res.send("done");
             }).catch(err => console.log(err));
         }else{
             res.sendStatus(401);
@@ -172,12 +171,8 @@ router.post('/post-comment',(req,res)=>{
                     Posts.updateOne(
                         { _id: req.body.postID }, 
                         { $push: { comments: newComment} },
-                    ).then(data => {
-                        
-                    }).catch(err => res.sendStatus(500));;
-                        Posts.findOne({_id:req.body.postID}).then(data => {
-                        res.send(data.comments);
-                }).catch(err => console.log(err));
+                    ).then(data => {        
+                    }).catch(err => res.sendStatus(500));
             }postComment().catch(err=> console.log(err));
         }).catch(err => console.log(err))
     }else{
@@ -194,7 +189,6 @@ router.post('/upload-image', upload.single('image'), async (req, res) => {
                 image: buffer,
             }
             await user.save().then(done => res.send("done")).catch(err => res.sendStatus(500));
-            res.send("Uploaded successfully")
         }).catch(err => console.log(err));
     }else{
         res.sendStatus(401);
@@ -216,34 +210,37 @@ router.post('/upload-image', upload.single('image'), async (req, res) => {
         }
     })(req, res,next);
 })
-router.post('/register',(req,res,next)=>{
-    User.findOne({username: req.body.username})
-    .then((findUser) =>{
-        if(findUser) res.sendStatus(409);
-        else{
-            async function registerUser(){
-                const hashedPassword = await bcrypt.hash(req.body.password ,10)
-                const newUser = new User({
-                    username: req.body.username,
-                    registerDate: new Date(),
-                    password: hashedPassword
-                })
-                await newUser.save().then(done => res.send("done")).catch(err => res.sendStatus(500));
-                passport.authenticate('local',(err,user,info)=>{
-                    if(err) throw err;
-                    if(!user) res.sendStatus(401)
-                    else{
-                        req.logIn(user, err =>{
-                            if(err) throw err
-                            res.status(200).send("User successfully logged in")
-                        })
-                    }
-                })(req, res,next);
-            }
-            registerUser().catch(err => console.log(err));
+router.post('/register',(req, res, next) => {
+    try {
+      User.findOne({ username: req.body.username }).then((findUser) => {;
+      if (findUser) {
+        return res.sendStatus(409);
+      }else{
+        async function createUser(){
+            const hashedPassword = await bcrypt.hash(req.body.password, 10);
+            const newUser = new User({
+              username: req.body.username,
+              registerDate: new Date(),
+              password: hashedPassword,
+            });
+            await newUser.save();
+            passport.authenticate('local', (err, user, info) => {
+              if (err) throw err;
+              if (!user) return res.sendStatus(401);
+              req.logIn(user, (err) => {
+                if (err) throw err;
+                res.status(200).send('User successfully logged in');
+              });
+            })(req, res, next);
+          }createUser().catch(err => {res.status(500)});
         }
-    })    
-})
+    })
+      } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+      }
+  });
+  
 router.post('/logout', function(req, res, next){
     req.logout(function(err) {
       if (err) { return next(err); }

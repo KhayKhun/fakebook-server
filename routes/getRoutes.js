@@ -45,15 +45,15 @@ router.get('/posts-for-home',(req,res)=>{
 
 router.get('/users/:userId/image', (req, res) => {
     User.findById(req.params.userId).then(user => {
-        if (!user.image) {
-            res.sendStatus(404);
-        }
-        else{
+        if (user.image) {
             res.setHeader('Content-Type', user.image.contentType || 'application/octet-stream');
             res.send({
                 contentType : user.image.contentType,
                 image : user.image.image
             });
+        }
+        else{
+            res.sendStatus(404);
         }
     }).catch(err => console.log(err));;
 });
