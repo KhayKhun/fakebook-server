@@ -14,11 +14,11 @@ router.patch('/submit-edited-post',(req,res)=>{
 
                 foundPost.save().then(data => {
                     res.send("edited");
-                });
+                }).catch(err => console.log(err));;
             }else{
                 res.sendStatus(404);
             }
-        })
+        }).catch(err => console.log(err));
     }post()
 })
   

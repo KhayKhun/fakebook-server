@@ -24,6 +24,6 @@ module.exports = function(passport) {
                 username:user.username,
                 registerDate : user.registerDate
             })
-        })
+        }).catch(err => console.log(err));
     })
 }

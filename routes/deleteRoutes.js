@@ -13,7 +13,7 @@ router.delete('/delete-post',(req, res)=>{
                 Posts.findOneAndDelete({_id:req.body.postID})
                 .then(data => {
                     res.send("Deleted post")
-                })
+                }).catch(err => console.log(err));
             }deletePost().catch(err=>console.log(err));
         }else{
             res.sendStatus(403);
@@ -34,11 +34,11 @@ router.delete('/delete-comment',(req,res)=>{
                 ).then(async (data )=> {
                     await Comment.deleteOne({_id : req.body.commentID})
                     res.send("deleted")
-                });
+                }).catch(err => console.log(err));
             }else{
                 res.sendStatus(403);
             }
-        })
+        }).catch(err => console.log(err));
     }else{
         res.sendStatus(401);
     }

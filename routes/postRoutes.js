@@ -27,7 +27,7 @@ router.post('/get-users',(req,res)=>{
     if(req.isAuthenticated()){
         User.find({_id: {$ne :  req.user.id }}).then(data =>{
             res.send(data)
-        })
+        }).catch(err => console.log(err));
     }else{
         res.sendStatus(401);
     }
@@ -37,7 +37,7 @@ router.post('/get-user-by-id',(req, res)=>{
     .then(foundUser=>{
         if(foundUser) res.send(foundUser);
         else res.sendStatus(404);
-    })
+    }).catch(err => console.log(err));
 })
 
 router.post('/get-profile-or-user', (req, res) => {
@@ -54,11 +54,11 @@ router.post('/get-profile-or-user', (req, res) => {
                             user : foundUser,
                             posts : data
                         })
-                    });
+                    }).catch(err => console.log(err));
                 }else{
                     res.sendStatus(404);
                 }
-            })
+            }).catch(err => console.log(err));
         }
     }else {
         res.sendStatus(401)
@@ -76,7 +76,7 @@ router.post('/is-liked',(req, res) => {
             }else{
                 res.send();
             }
-        })
+        }).catch(err => console.log(err));
     }else{
         res.send();
     }
@@ -116,9 +116,9 @@ router.post('/submit',(req,res)=>{
                 });
                 await newPost.save();
                 res.send("done");
-            })
+            }).catch(err => console.log(err));
         }else{
-            res.sendStatue(401);
+            res.sendStatus(401);
         }
     })
 router.post('/post-like',(req,res)=>{
@@ -136,8 +136,8 @@ router.post('/post-like',(req,res)=>{
                         likes : final.likes,
                         message : "Unliked Successfully"
                     });
-                });
-            });
+                }).catch(err => console.log(err));;
+            }).catch(err => console.log(err));;
             }else{
                 Posts.updateOne(
                     { _id: req.body.postID }, 
@@ -149,10 +149,10 @@ router.post('/post-like',(req,res)=>{
                             likes : final.likes,
                             message : "Liked successfully"
                         });
-                    });
-                });
+                    }).catch(err => console.log(err));;
+                }).catch(err => console.log(err));;
             }
-        });
+        }).catch(err => console.log(err));;
 
     }else{
         res.sendStatus(401);
@@ -167,17 +167,17 @@ router.post('/post-comment',(req,res)=>{
                     commenterID : req.user.id,
                     commentedDate : new Date(),
                     comment : req.body.comment
-                })
+                }).catch(err => console.log(err));
                 await newComment.save()
                     Posts.updateOne(
                         { _id: req.body.postID }, 
                         { $push: { comments: newComment} },
                     ).then(data => {
                         
-                    });
-                Posts.findOne({_id:req.body.postID}).then(data => {
-                    res.send(data.comments);
-                })
+                    }).catch(err => console.log(err));;
+                        Posts.findOne({_id:req.body.postID}).then(data => {
+                        res.send(data.comments);
+                }).catch(err => console.log(err));
             }postComment().catch(err=> console.log(err));
         })
     }else{
