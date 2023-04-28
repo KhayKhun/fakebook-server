@@ -27,7 +27,7 @@ router.post('/get-users',(req,res)=>{
     if(req.isAuthenticated()){
         User.find({_id: {$ne :  req.user.id }}).then(data =>{
             res.send(data)
-        }).catch(err => console.log(err));
+        }).catch(err => res.sendStatus(404));
     }else{
         res.sendStatus(401);
     }
@@ -114,7 +114,7 @@ router.post('/submit',(req,res)=>{
                     content : req.body.content,
                     edited : false
                 });
-                await newPost.save();
+                await newPost.save().then(done => res.send("done")).catch(err => res.sendStatus(500));
                 res.send("done");
             }).catch(err => console.log(err));
         }else{
@@ -167,19 +167,19 @@ router.post('/post-comment',(req,res)=>{
                     commenterID : req.user.id,
                     commentedDate : new Date(),
                     comment : req.body.comment
-                }).catch(err => console.log(err));
-                await newComment.save()
+                });
+                await newComment.save().then(done => res.send("done")).catch(err => res.sendStatus(500));
                     Posts.updateOne(
                         { _id: req.body.postID }, 
                         { $push: { comments: newComment} },
                     ).then(data => {
                         
-                    }).catch(err => console.log(err));;
+                    }).catch(err => res.sendStatus(500));;
                         Posts.findOne({_id:req.body.postID}).then(data => {
                         res.send(data.comments);
                 }).catch(err => console.log(err));
             }postComment().catch(err=> console.log(err));
-        })
+        }).catch(err => console.log(err))
     }else{
         res.sendStatus(401);
     }
@@ -193,7 +193,7 @@ router.post('/upload-image', upload.single('image'), async (req, res) => {
                 contentType: mimetype,
                 image: buffer,
             }
-            await user.save();
+            await user.save().then(done => res.send("done")).catch(err => res.sendStatus(500));
             res.send("Uploaded successfully")
         }).catch(err => console.log(err));
     }else{
@@ -228,8 +228,7 @@ router.post('/register',(req,res,next)=>{
                     registerDate: new Date(),
                     password: hashedPassword
                 })
-                await newUser.save().then(data => {
-                });
+                await newUser.save().then(done => res.send("done")).catch(err => res.sendStatus(500));
                 passport.authenticate('local',(err,user,info)=>{
                     if(err) throw err;
                     if(!user) res.sendStatus(401)
