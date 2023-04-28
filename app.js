@@ -44,6 +44,6 @@ app.use('/', deleteRoutes);
 app.use('/', patchRoutes);
 
 //-----------------------------Start Server-----------------------------------
-app.listen(process.env.PORT,function(){
-    console.log(`listening on port ${process.env.PORT}`);
+app.listen(process.env.PORT || 3001,function(){
+    console.log(`listening on port ${process.env.PORT || 3001}`);
 })
