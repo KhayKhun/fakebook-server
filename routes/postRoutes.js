@@ -212,7 +212,8 @@ router.post('/upload-image', upload.single('image'), async (req, res) => {
 })
 router.post('/register',(req, res, next) => {
     try {
-      User.findOne({ username: req.body.username }).then((findUser) => {;
+      User.findOne({ username: req.body.username })
+      .then((findUser) => {
       if (findUser) {
         return res.sendStatus(409);
       }else{
@@ -244,7 +245,7 @@ router.post('/register',(req, res, next) => {
 router.post('/logout', function(req, res, next){
     req.logout(function(err) {
       if (err) { return next(err); }
-      res.send('Logout Success');
+      else res.send('Logout Success');
     });
   });
 //------------------------------Auth----------------------------------
