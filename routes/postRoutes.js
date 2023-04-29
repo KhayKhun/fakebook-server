@@ -1,3 +1,4 @@
+process.on('unhandledRejection', error => { throw error; });
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
@@ -14,8 +15,8 @@ router.post('/is-owner',(req,res)=>{
         Posts.findOne({_id:req.body.postID})
         .then(foundPost => {
             if(foundPost){
-                if(foundPost.userID == req.user.id) res.send("owner")
-                else res.sendStatus(403)
+                if(foundPost.userID == req.user.id) res.send("owner");
+                else res.sendStatus(403);
             }else{
                 res.sendStatus(404);
             }
@@ -204,7 +205,6 @@ router.post('/upload-image', upload.single('image'), async (req, res) => {
         else{
             req.logIn(user, err =>{
                 if(err) throw err
-                console.log("logged in")
                 res.status(200).send("User successfully logged in")
             })
         }
