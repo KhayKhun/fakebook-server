@@ -1,4 +1,3 @@
-process.on('unhandledRejection', error => { throw error; });
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
@@ -180,17 +179,15 @@ router.post('/post-comment',(req,res)=>{
         res.sendStatus(401);
     }
 })
-router.post('/upload-image', upload.single('image'), async (req, res) => {
+router.post('/upload-image',(req, res) => {
     if(req.isAuthenticated()){
-        User.findOne({_id:req.user.id})
-        .then(async (user) => {
-            const { originalname, mimetype, buffer } = req.file;
-            user.image = {
-                contentType: mimetype,
-                image: buffer,
-            }
-            await user.save().then(done => res.send("done")).catch(err => res.sendStatus(500));
-        }).catch(err => console.log(err));
+        User.updateOne({_id:req.user.id},{image:req.body.imageURL})
+        .then(data=> {
+            console.log(data);
+            res.sendStatus(201);
+        })
+        .catch(err => {console.log(err) 
+            res.sendStatus(500)});
     }else{
         res.sendStatus(401);
     }

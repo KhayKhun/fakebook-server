@@ -46,10 +46,8 @@ router.get('/posts-for-home',(req,res)=>{
 router.get('/users/:userId/image', (req, res) => {
     User.findById(req.params.userId).then(user => {
         if (user.image) {
-            res.setHeader('Content-Type', user.image.contentType || 'application/octet-stream');
             res.send({
-                contentType : user.image.contentType,
-                image : user.image.image
+                image : user.image
             });
         }
         else{

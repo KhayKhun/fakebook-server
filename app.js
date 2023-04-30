@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
-mongoose.connect(process.env.MONGODB_URL,{useNewUrlParser:true});
+mongoose.connect(process.env.MONGODB_URL,{useNewUrlParser: true ,useUnifiedTopology: true ,serverSelectionTimeoutMS: 30000 });
 
 const passport = require('passport');
 const session = require('express-session');
