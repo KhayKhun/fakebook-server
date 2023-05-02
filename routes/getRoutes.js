@@ -51,7 +51,7 @@ router.get('/users/:userId/image', (req, res) => {
             });
         }
         else{
-            res.sendStatus(404);
+            res.send("No image uploaded").status(404);
         }
     }).catch(err => console.log(err));;
 });
