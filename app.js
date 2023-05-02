@@ -16,6 +16,7 @@ const deleteRoutes = require('./routes/deleteRoutes');
 const patchRoutes = require('./routes/patchRoutes');
 
 //----------------------------End of import------------------------------------
+app.set('trust proxy', 1);
 app.use(bodyParser.urlencoded({ extended : true }));
 app.use(bodyParser.json());
 app.use(cors({
@@ -37,7 +38,6 @@ app.use(cookieParser('secret'))
 app.use(passport.initialize());
 app.use(passport.session());
 require('./passportConfig')(passport);
-app.set('trust proxy', 1);
 
 //-----------------------------Routes-----------------------------------
 app.use('/', getRoutes);
