@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+const MongoStore = require('connect-mongo');
 mongoose.connect(process.env.MONGODB_URL,{useNewUrlParser: true ,useUnifiedTopology: true ,serverSelectionTimeoutMS: 30000 });
 
 const passport = require('passport');
@@ -28,6 +29,9 @@ app.use(session({
     secret : 'secret',
     resave : true,
     saveUninitialized : true,
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGODB_URL,
+    }),
     cookie :{
         maxAge : 3600 * 24 * 3,
         sameSite : 'none',
