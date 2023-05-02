@@ -16,7 +16,6 @@ const deleteRoutes = require('./routes/deleteRoutes');
 const patchRoutes = require('./routes/patchRoutes');
 
 //----------------------------End of import------------------------------------
-
 app.use(bodyParser.urlencoded({ extended : true }));
 app.use(bodyParser.json());
 app.use(cors({
@@ -29,13 +28,16 @@ app.use(session({
     resave : true,
     saveUninitialized : true,
     cookie :{
-        maxAge : 3600 * 24 * 3
+        maxAge : 3600 * 24 * 3,
+        sameSite : 'none',
+        secure : true,
     }
 }));
 app.use(cookieParser('secret'))
 app.use(passport.initialize());
 app.use(passport.session());
 require('./passportConfig')(passport);
+app.set('trust proxy', 1);
 
 //-----------------------------Routes-----------------------------------
 app.use('/', getRoutes);
