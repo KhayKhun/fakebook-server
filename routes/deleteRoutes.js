@@ -6,7 +6,6 @@ const Posts = require('../posts');
 const Comment = require('../comment');
 
 router.delete('/delete-post',(req, res)=>{
-    console.log(req.body);
     if(req.isAuthenticated()){
         if(req.body.ownerID === req.user.id){
             async function deletePost(){

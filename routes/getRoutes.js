@@ -34,7 +34,6 @@ router.get('/user-only',(req,res)=>{
 
 router.get('/posts-for-home',(req,res)=>{
     if(req.isAuthenticated()){
-        console.log(req.cookies);
         Posts.find({ userID : {$ne : req.user.id}}).then((data)=>{
             res.send(data);
         }).catch(err => console.log(err));
