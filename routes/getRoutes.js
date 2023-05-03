@@ -17,7 +17,7 @@ router.get('/user',(req,res)=>{
             }).catch(err => console.log(err));
         }).catch(err => console.log(err));
     }else{
-        res.send("not authenticated").status(401)
+        res.status(401).send("not authenticated");
     }
 })
 router.get('/user-only',(req,res)=>{
@@ -25,10 +25,10 @@ router.get('/user-only',(req,res)=>{
         User.findById(req.user.id)
         .then(foundUser=>{
             if(foundUser) res.send(foundUser);
-            else res.send("user not found").status(404);
+            else res.status(404).send("user not found");
         }).catch(err => console.log(err));
     }else{
-        res.send("not authenticated").status(401)
+        res.status(401).send("not authenticated");
     }
 })
 
@@ -50,7 +50,7 @@ router.get('/users/:userId/image', (req, res) => {
             });
         }
         else{
-            res.send("No image uploaded").status(404);
+            res.status(404).send("No image uploaded");
         }
     }).catch(err => console.log(err));;
 });
