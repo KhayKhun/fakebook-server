@@ -16,7 +16,7 @@ router.patch('/submit-edited-post',(req,res)=>{
                     res.send("edited");
                 }).catch(err => console.log(err));;
             }else{
-                res.status(404).send("post not found");
+                res.sendStatus(404);
             }
         }).catch(err => console.log(err));
     }post()
