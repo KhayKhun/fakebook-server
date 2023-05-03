@@ -50,7 +50,7 @@ router.get('/users/:userId/image', (req, res) => {
             });
         }
         else{
-            res.sendStatus(404);
+            res.send();
         }
     }).catch(err => console.log(err));;
 });
