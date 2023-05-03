@@ -17,7 +17,7 @@ router.get('/user',(req,res)=>{
             }).catch(err => console.log(err));
         }).catch(err => console.log(err));
     }else{
-        res.sendStatus(401)
+        res.send("not authenticated").status(401)
     }
 })
 router.get('/user-only',(req,res)=>{
@@ -25,10 +25,10 @@ router.get('/user-only',(req,res)=>{
         User.findById(req.user.id)
         .then(foundUser=>{
             if(foundUser) res.send(foundUser);
-            else res.sendStatus(404);
+            else res.send("user not found").status(404);
         }).catch(err => console.log(err));
     }else{
-        res.sendStatus(401)
+        res.send("not authenticated").status(401)
     }
 })
 

@@ -13,11 +13,11 @@ router.post('/is-owner',(req,res)=>{
         .then(foundPost => {
             if(foundPost){
                 if(foundPost.userID == req.user.id) res.send("owner");
-                else res.sendStatus(403);
+                else res.send("not owner").status(403);
             }else{
-                res.sendStatus(404);
+                res.send("404").status(404);
             }
-        }).catch(err => res.sendStatus(404)); 
+        }).catch(err => res.send("404").status(404)); 
     } 
 })
 
@@ -25,16 +25,16 @@ router.post('/get-users',(req,res)=>{
     if(req.isAuthenticated()){
         User.find({_id: {$ne :  req.user.id }}).then(data =>{
             res.send(data)
-        }).catch(err => res.sendStatus(404));
+        }).catch(err => res.send("404").status(404));
     }else{
-        res.sendStatus(401);
+        res.send("not authenticated").status(401);
     }
 })
 router.post('/get-user-by-id',(req, res)=>{
     User.findOne({_id:req.body.userID})
     .then(foundUser=>{
         if(foundUser) res.send(foundUser);
-        else res.sendStatus(404);
+        else res.send("404").status(404);
     }).catch(err => console.log(err));
 })
 
@@ -54,12 +54,12 @@ router.post('/get-profile-or-user', (req, res) => {
                         })
                     }).catch(err => console.log(err));
                 }else{
-                    res.sendStatus(404);
+                    res.send("404").status(404);
                 }
             }).catch(err => console.log(err));
         }
     }else {
-        res.sendStatus(401)
+        res.send("not authenticated").status(401)
     }
 })
 
@@ -90,10 +90,10 @@ router.post('/get-post-data',(req,res)=>{
                         post : data,
                         owner : user
                     })
-                    else res.sendStatus(403)
+                    else res.send("not owner").status(403)
                 }).catch((err)=>{console.log(err)}); 
             }else{
-                res.sendStatus(404);
+                res.send("404").status(404);
             }
         }).catch((err)=>{console.log(err)});
     });
@@ -112,10 +112,10 @@ router.post('/submit',(req,res)=>{
                     content : req.body.content,
                     edited : false
                 });
-                await newPost.save().then(done => res.send("done")).catch(err => res.sendStatus(500));
+                await newPost.save().then(done => res.send("done")).catch(err => res.send("").status(500));
             }).catch(err => console.log(err));
         }else{
-            res.sendStatus(401);
+            res.send("not authenticated").status(401);
         }
     })
 router.post('/post-like',(req,res)=>{
@@ -152,7 +152,7 @@ router.post('/post-like',(req,res)=>{
         }).catch(err => console.log(err));;
 
     }else{
-        res.sendStatus(401);
+        res.send("not authenticated").status(401);
     }
 })
 router.post('/post-comment',(req,res)=>{
@@ -165,16 +165,16 @@ router.post('/post-comment',(req,res)=>{
                     commentedDate : new Date(),
                     comment : req.body.comment
                 });
-                await newComment.save().then(done => res.send("done")).catch(err => res.sendStatus(500));
+                await newComment.save().then(done => res.send("done")).catch(err => res.send("").status(500));
                     Posts.updateOne(
                         { _id: req.body.postID }, 
                         { $push: { comments: newComment} },
                     ).then(data => {        
-                    }).catch(err => res.sendStatus(500));
+                    }).catch(err => res.send("").status(500));
             }postComment().catch(err=> console.log(err));
         }).catch(err => console.log(err))
     }else{
-        res.sendStatus(401);
+        res.send("not authenticated").status(401);
     }
 })
 router.post('/upload-image',(req, res) => {
@@ -182,12 +182,12 @@ router.post('/upload-image',(req, res) => {
         User.updateOne({_id:req.user.id},{image:req.body.imageURL})
         .then(data=> {
             console.log(data);
-            res.sendStatus(201);
+            res.send("").status(201);
         })
         .catch(err => {console.log(err) 
-            res.sendStatus(500)});
+            res.send("").status(500)});
     }else{
-        res.sendStatus(401);
+        res.send("not authenticated").status(401);
     }
   });
 //----------------------------Upload and post------------------------------------
@@ -196,7 +196,7 @@ router.post('/upload-image',(req, res) => {
   router.post('/login',(req,res,next)=>{
     passport.authenticate('local',(err,user,info)=>{
         if(err) throw err;
-        if(!user) res.sendStatus(401)
+        if(!user) res.send("not authenticated").status(401)
         else{
             req.logIn(user, err =>{
                 if(err) throw err
@@ -210,7 +210,7 @@ router.post('/register',(req, res, next) => {
       User.findOne({ username: req.body.username })
       .then((findUser) => {
       if (findUser) {
-        return res.sendStatus(409);
+        return res.send("").status(409);
       }else{
         async function createUser(){
             const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -222,7 +222,7 @@ router.post('/register',(req, res, next) => {
             await newUser.save();
             passport.authenticate('local', (err, user, info) => {
               if (err) throw err;
-              if (!user) return res.sendStatus(401);
+              if (!user) return res.send("not authenticated").status(401);
               req.logIn(user, (err) => {
                 if (err) throw err;
                 res.status(200).send('User successfully logged in');
@@ -233,7 +233,7 @@ router.post('/register',(req, res, next) => {
     })
       } catch (error) {
         console.log(error);
-        res.sendStatus(500);
+        res.send("").status(500);
       }
   });
   

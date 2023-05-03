@@ -15,10 +15,10 @@ router.delete('/delete-post',(req, res)=>{
                 }).catch(err => console.log(err));
             }deletePost().catch(err=>console.log(err));
         }else{
-            res.sendStatus(403);
+            res.send("not owner").status(403);
         }
     }else{
-        res.sendStatus(401)
+        res.send("not authenticated").status(401)
     }
 });
 router.delete('/delete-comment',(req,res)=>{
@@ -35,11 +35,11 @@ router.delete('/delete-comment',(req,res)=>{
                     res.send("deleted")
                 }).catch(err => console.log(err));
             }else{
-                res.sendStatus(403);
+                res.send("not owner").status(403);
             }
         }).catch(err => console.log(err));
     }else{
-        res.sendStatus(401);
+        res.send("not authenticated").status(401);
     }
 })
 
