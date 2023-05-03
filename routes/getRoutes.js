@@ -28,7 +28,7 @@ router.get('/user-only',(req,res)=>{
             else res.sendStatus(404);
         }).catch(err => console.log(err));
     }else{
-        res.sendStatus(401);
+        res.status(401).send("not authenticated");
     }
 })
 
