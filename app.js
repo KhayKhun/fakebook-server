@@ -21,7 +21,7 @@ app.set('trust proxy', 1);
 app.use(bodyParser.urlencoded({ extended : true }));
 app.use(bodyParser.json());
 app.use(cors({
-    origin: ['https://khaykhun-fakebook.netlify.app', 'http://localhost:5173'],
+    origin: ['https://fakebook-frontend-cxlr.onrender.com', 'http://localhost:5173'],
     credentials: true,
     optionsSuccessStatus: 200
   }));
