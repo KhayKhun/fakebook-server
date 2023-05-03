@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended : true }));
 app.use(bodyParser.json());
 app.use(cors({
     origin : [
-        'https://6452771e084bd32499438200--marvelous-lollipop-836750.netlify.app',
+        'https://64527c6fc80cef24dfcca2aa--marvelous-lollipop-836750.netlify.app/',
         'https://marvelous-lollipop-836750.netlify.app',
         'http://localhost:5173'
     ],
