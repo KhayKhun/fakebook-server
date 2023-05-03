@@ -21,7 +21,7 @@ app.set('trust proxy', 1);
 app.use(bodyParser.urlencoded({ extended : true }));
 app.use(bodyParser.json());
 app.use(cors({
-    origin: ['https://marvelous-lollipop-836750.netlify.app', 'http://localhost:5173'],
+    origin: ['https://marvelous-lollipop-836750.netlify.app','https://6452771e084bd32499438200--marvelous-lollipop-836750.netlify.app', 'http://localhost:5173'],
     credentials: true,
     optionsSuccessStatus: 200
   }));
