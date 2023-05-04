@@ -21,7 +21,7 @@ app.set('trust proxy', 1);
 app.use(bodyParser.urlencoded({ extended : true }));
 app.use(bodyParser.json());
 app.use(cors({
-    origin: ['https://graceful-gumdrop-d94a77.netlify.app', 'http://localhost:5173'],
+    origin: ['https://khaykhunfakebook.netlify.app', 'http://localhost:5173'],
     credentials: true,
     optionsSuccessStatus: 200
   }));
